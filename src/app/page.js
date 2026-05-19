@@ -4,10 +4,33 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 const UPLOAD_URL = "/api/upload";
 
+/** Lista de palavras para a Fase 1 (15 palavras aleatórias de dificuldade progressiva) */
+const PALAVRAS_FASE_UM = [
+  "bola",     // 1 - dissílaba simples
+  "casa",     // 2 - dissílaba simples
+  "gato",     // 3 - dissílaba simples
+  "sapo",     // 4 - dissílaba simple
+  "mesa",     // 5 - dissílaba simples
+  "livro",    // 6 - dissílaba com encontro consonantal
+  "porta",    // 7 - dissílaba com encontro consonantal
+  "escola",   // 8 - trissílaba comum
+  "menino",   // 9 - trissílaba comum
+  "janela",   // 10 - trissílaba comum
+  "cadeira",  // 11 - trissílaba com dígrafo
+  "borboleta", // 12 - polissílaba
+  "elefante", // 13 - polissílaba
+  "girassol", // 14 - polissílaba com dígrafo
+  "chocolate" // 15 - polissílaba com dígrafo
+];
+
 const TEXTOS_AVALIACAO = [
-  "A professora leu uma história.",
-  "A professora leu uma história para a turma.",
-  "A professora leu uma história para a turma. Depois, cada aluno contou a parte que mais gostou."
+  PALAVRAS_FASE_UM.join(" "), // Fase 1: 15 palavras aleatórias
+  
+  // Fase 2: Texto médio com contexto narrativo simples (~25 palavras)
+  "A professora leu uma história para a turma. Era uma história sobre um gato muito esperto que vivia grandes aventuras no jardim da escola. As crianças adoraram.",
+  
+  // Fase 3: Texto longo com narrativa mais complexa (~50 palavras) - Tema: natureza e amizade
+  "Numa manhã ensolarada, Pedro e Ana foram passear no parque da cidade. Eles viram um esquilo subindo rapidamente em uma árvore gigante, carregando nozes para sua toca. Mais adiante, encontraram um lago onde patos nadavam tranquilamente com seus filhotes. As crianças sentaram em um banco para descansar e compartilhar o lanche. Pedro ofereceu metade de sua maçã para Ana, que retribuiu com um suco delicioso. Enquanto comiam, observaram borboletas coloridas voando entre as flores do jardim. Eles perceberam como a natureza é maravilhosa e prometeram voltar no próximo fim de semana para explorar mais aquele lugar encantador."
 ];
 
 /** Ciclo visível/oculto de cada palavra na fase 1 (ms). */
