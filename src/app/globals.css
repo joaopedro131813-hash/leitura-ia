@@ -1,13 +1,14 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f5f8ff;
-  --foreground: #0f172a;
-  --surface: rgba(255, 255, 255, 0.8);
-  --surface-strong: rgba(255, 255, 255, 0.95);
-  --border: rgba(148, 163, 184, 0.24);
-  --accent: #7dd3fc;
-  --accent-soft: rgba(125, 211, 252, 0.28);
+  --background: #f2f7ff;
+  --foreground: #102641;
+  --surface: rgba(255, 255, 255, 0.92);
+  --surface-strong: rgba(248, 250, 255, 0.98);
+  --border: rgba(96, 165, 250, 0.32);
+  --accent: #60a5fa;
+  --accent-soft: rgba(96, 165, 250, 0.24);
+  --accent-strong: #7c3aed;
 }
 
 @theme inline {
@@ -20,12 +21,41 @@
 body {
   min-height: 100vh;
   margin: 0;
-  background: radial-gradient(circle at top left, rgba(125, 211, 252, 0.18), transparent 25%),
-    radial-gradient(circle at bottom right, rgba(168, 85, 247, 0.12), transparent 18%),
-    linear-gradient(180deg, #f7fbff 0%, #eef4ff 45%, #e4eaf8 100%);
+  background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.16), transparent 20%),
+    radial-gradient(circle at bottom right, rgba(236, 72, 153, 0.08), transparent 22%),
+    linear-gradient(180deg, #e9eff8 0%, #d6e1ef 40%, #cfd9e5 75%, #c4d0dc 100%);
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   overflow-x: hidden;
+  position: relative;
+}
+
+.futuristic-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  box-shadow: 0 24px 80px rgba(56, 189, 248, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.futuristic-btn {
+  border: none;
+  background: linear-gradient(135deg, #38bdf8, #a78bfa);
+  color: #031124;
+  box-shadow: 0 18px 50px rgba(56, 189, 248, 0.35);
+}
+
+.futuristic-btn:hover {
+  transform: translateY(-1px);
+}
+
+.floating-chip {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(12px);
+}
+
+.glow-ring {
+  box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.18), 0 0 40px rgba(56, 189, 248, 0.15);
 }
 
 @layer base {
