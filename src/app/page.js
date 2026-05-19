@@ -244,42 +244,102 @@ function analisarFormaDaPalavra(tokens, indiceInicial, palavraEsperada) {
   };
 }
 
-function classificarFaseUmPorForma(avaliacao) {
-  const { total, leiturasSilabicas, leiturasEmBloco, naoLidas, mediaSimilaridade } =
-    avaliacao;
+function classificarFaseUmPorForma(avaliacao, duracao) {
+  const {
+    total,
+    corretas,
+    leiturasSilabicas,
+    leiturasEmBloco,
+    naoLidas,
+    mediaSimilaridade,
+    precisao,
+  } = avaliacao;
+
   const pctSilabica = total > 0 ? (leiturasSilabicas / total) * 100 : 0;
   const pctBloco = total > 0 ? (leiturasEmBloco / total) * 100 : 0;
   const pctNaoLida = total > 0 ? (naoLidas / total) * 100 : 0;
 
-  if (pctNaoLida >= 60 || (pctSilabica >= 70 && pctBloco < 15)) {
+  const palavrasPorMinuto =
+    duracao > 0 ? Math.round((total / duracao) * 60) : 0;
+  const ppmCorretas = duracao > 0 ? Math.round((corretas / duracao) * 60) : 0;
+
+  const muitoLento = palavrasPorMinuto < 10;
+  const lento = palavrasPorMinuto < 18;
+  const ritmoBom = palavrasPorMinuto >= 22;
+
+  const leuBem = precisao >= 75;
+  const leuParcial = precisao >= 40;
+
+  const leituraFragmentada = pctSilabica >= 45 && pctBloco < 50;
+  const leituraEmBloco = pctBloco >= 50 && mediaSimilaridade >= 65;
+
+  const tempoFormatado = duracao > 0 ? `${Number(duracao.toFixed(1))}s` : "—";
+  const detalheConteudo = `Leu ${corretas} de ${total} palavras com ${precisao}% de precisão`;
+  const detalheTempo = `em ${tempoFormatado} (${palavrasPorMinuto} palavras/min)`;
+
+  const base = { palavrasPorMinuto, ppmCorretas };
+
+  if (
+    pctNaoLida >= 55 ||
+    (precisao < 30 && muitoLento) ||
+    (leituraFragmentada && muitoLento && !leuParcial)
+  ) {
     return {
+      ...base,
       nivel: "Pré-leitor",
       cor: "text-rose-700",
-      observacao:
-        "A leitura ainda aparece muito fragmentada, como se as palavras fossem lidas em pedaços ou poucas fossem reconhecidas de uma vez.",
+      observacao: `${detalheConteudo} ${detalheTempo}. Pouco foi reconhecido ou a leitura foi muito lenta e em pedaços.`,
     };
   }
 
-  if (pctSilabica >= 45 && pctBloco < 50) {
+  if (leituraFragmentada || (pctSilabica > pctBloco && !leituraEmBloco)) {
+    const nivel = lento && precisao < 45 ? "Pré-leitor" : "Leitor silábico";
     return {
-      nivel: "Leitor silábico",
-      cor: "text-amber-700",
-      observacao: `Em ${leiturasSilabicas} de ${total} palavras, a fala veio em partes (ex.: sílaba por sílaba), e não como uma palavra inteira.`,
+      ...base,
+      nivel,
+      cor: nivel === "Pré-leitor" ? "text-rose-700" : "text-amber-700",
+      observacao: `${detalheConteudo} ${detalheTempo}. Em ${leiturasSilabicas} palavra(s) a fala veio em partes (sílaba a sílaba), não como palavra inteira.${
+        lento ? " O tempo de leitura ainda está baixo." : ""
+      }`,
     };
   }
 
-  if (pctBloco >= 55 && mediaSimilaridade >= 70) {
+  if (leituraEmBloco && leuBem && ritmoBom) {
     return {
+      ...base,
       nivel: "Leitor fluente",
       cor: "text-emerald-700",
-      observacao: `Em ${leiturasEmBloco} de ${total} palavras, o aluno tentou falar a palavra inteira, com boa aproximação ao esperado.`,
+      observacao: `${detalheConteudo} ${detalheTempo}. Leu palavras inteiras com boa precisão e ritmo adequado.`,
+    };
+  }
+
+  if (leituraEmBloco && (leuParcial || !lento)) {
+    const nivel =
+      leuBem && !lento ? "Leitor fluente" : "Leitor iniciante";
+    return {
+      ...base,
+      nivel,
+      cor: nivel === "Leitor fluente" ? "text-emerald-700" : "text-sky-700",
+      observacao: `${detalheConteudo} ${detalheTempo}. Tenta falar a palavra inteira (${leiturasEmBloco} de ${total})${
+        lento ? ", mas ainda precisa ganhar ritmo" : ", com precisão em desenvolvimento"
+      }.`,
+    };
+  }
+
+  if (leituraEmBloco && lento) {
+    return {
+      ...base,
+      nivel: "Leitor iniciante",
+      cor: "text-sky-700",
+      observacao: `${detalheConteudo} ${detalheTempo}. Forma de leitura em palavra inteira, porém o tempo ainda está lento para o texto.`,
     };
   }
 
   return {
+    ...base,
     nivel: "Leitor iniciante",
     cor: "text-sky-700",
-    observacao: `Há mistura de leitura em partes (${leiturasSilabicas}) e palavras inteiras (${leiturasEmBloco}), sinal de transição entre sílabas e palavras.`,
+    observacao: `${detalheConteudo} ${detalheTempo}. Mistura leitura em partes (${leiturasSilabicas}) e palavras inteiras (${leiturasEmBloco}).`,
   };
 }
 
@@ -601,7 +661,7 @@ export default function Home() {
       : undefined;
 
     const classificacao = currentPart === 0 && avaliacaoFaseUm
-      ? classificarFaseUmPorForma(avaliacaoFaseUm)
+      ? classificarFaseUmPorForma(avaliacaoFaseUm, duracao)
       : classificarFluencia(
           duracao > 0 ? Math.round((quantidadePalavras / duracao) * 60) : 0,
           avaliacaoFaseUm?.precisao,
@@ -623,8 +683,8 @@ export default function Home() {
       transcricao: transcricaoAtual.current || "Transcrição automática não capturada.",
       avaliacaoFaseUm,
       origem: currentPart === 0
-        ? "Classificação pela forma de leitura: palavra inteira ou em partes/sílabas, a partir da transcrição da fala."
-        : "Classificação inicial por tempo de leitura.",
+        ? "Classificação pelo que o aluno leu (precisão e forma: palavra inteira ou em partes) e pelo tempo da leitura."
+        : "Classificação pelo que foi lido e pelo tempo de leitura.",
     };
 
     try {
@@ -666,117 +726,82 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen px-4 py-8 text-slate-950 sm:px-8">
+    <main className="app-shell">
       <input id="texto-avaliacao-fixo" type="hidden" value={TEXTOS_AVALIACAO[currentPart]} />
-      <section className="mx-auto flex max-w-6xl flex-col gap-6">
-        <header className="relative overflow-hidden rounded-[2.5rem] border border-slate-200/70 bg-[radial-gradient(circle_at_top_left,rgba(96,165,250,0.16),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(236,72,153,0.10),transparent_20%),linear-gradient(180deg,#eaf2ff,#d8e5f0)] p-6 shadow-[0_40px_80px_-40px_rgba(96,165,250,0.14)]">
-          <div className="absolute -left-12 top-10 h-24 w-24 rounded-full bg-cyan-200/18 blur-3xl" />
-          <div className="absolute right-8 top-12 h-32 w-32 rounded-full bg-rose-200/12 blur-3xl" />
-          <div className="absolute left-1/2 top-0 h-48 w-48 -translate-x-1/2 rounded-full bg-slate-100/55 blur-3xl" />
-          <div className="grid gap-6 sm:p-4 lg:grid-cols-[1fr_300px] relative">
-            <div className="flex flex-col justify-center gap-4">
-              <h1 className="max-w-3xl text-4xl font-black leading-tight text-slate-950 sm:text-5xl">
-                Avaliação de fluência leitora
-              </h1>
-              <p className="max-w-2xl text-lg font-medium text-slate-700">
-                Ajude o aluno a treinar a leitura com confiança, receber feedback instantâneo e se divertir como se estivesse em uma aventura escolar.
-              </p>
-            </div>
-
-            <div className="relative flex min-h-[240px] items-center justify-center rounded-[2rem] border border-slate-200/60 bg-white/80 p-5 shadow-[0_30px_80px_-40px_rgba(96,165,250,0.18)]">
-              <div className="relative h-48 w-48 rounded-full bg-gradient-to-br from-cyan-200/80 via-fuchsia-200/70 to-slate-100 shadow-[0_0_0_40px_rgba(96,165,250,0.14)]">
-                <div className="absolute inset-0 rounded-full border border-slate-200/50" />
-                <div className="absolute left-4 top-6 h-4 w-4 rounded-full bg-amber-200 shadow-[0_0_20px_rgba(251,191,36,0.35)]" />
-                <div className="absolute right-5 top-12 h-6 w-6 rounded-full bg-cyan-100/90" />
-                <div className="absolute left-12 bottom-10 text-center">
-                  <span className="inline-flex h-16 w-16 items-center justify-center rounded-full bg-slate-950 text-3xl font-black text-white shadow-[0_20px_30px_-20px_rgba(15,23,42,0.2)]">
-                    A+
-                  </span>
-                </div>
-              </div>
-            </div>
+      <div className="app-container">
+        <header className="app-header">
+          <h1>Avaliação de fluência leitora</h1>
+          <p>
+            Grave a leitura do aluno, acompanhe o progresso em três etapas e receba uma
+            classificação com base na fala e no tempo.
+          </p>
+          <div className="steps-bar" role="list" aria-label="Etapas da avaliação">
+            {TEXTOS_AVALIACAO.map((_, indice) => {
+              const numero = indice + 1;
+              const ativa = indice === currentPart;
+              const concluida = results.some((item) => item.part === numero);
+              return (
+                <span
+                  key={numero}
+                  role="listitem"
+                  className={`step-pill${ativa ? " active" : ""}${concluida && !ativa ? " done" : ""}`}
+                >
+                  Parte {numero}
+                </span>
+              );
+            })}
           </div>
         </header>
 
-        <div className="grid gap-4 lg:grid-cols-3">
-          <article className="rounded-[1.75rem] border border-cyan-300/15 bg-white/5 p-5 text-slate-100 shadow-[0_20px_60px_-35px_rgba(56,189,248,0.14)] backdrop-blur-xl">
-            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-cyan-300/15 text-3xl shadow-[0_10px_30px_-15px_rgba(56,189,248,0.35)]">
-              📚
-            </div>
-            <h3 className="text-xl font-black text-slate-950">Treino de leitura</h3>
-            <p className="mt-3 text-sm text-slate-500">
-              Palavras aparecem uma a uma para a criança praticar a leitura em voz alta.
-            </p>
-          </article>
+        <div className="workspace">
+          <aside className="card card-padded">
+            <h2 className="panel-title">Dados da avaliação</h2>
 
-          <article className="rounded-[1.75rem] border border-violet-300/15 bg-white/5 p-5 text-slate-100 shadow-[0_20px_60px_-35px_rgba(168,85,247,0.14)] backdrop-blur-xl">
-            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-violet-300/15 text-3xl shadow-[0_10px_30px_-15px_rgba(168,85,247,0.35)]">
-              🎙️
-            </div>
-            <h3 className="text-xl font-black text-slate-950">Feedback instantâneo</h3>
-            <p className="mt-3 text-sm text-slate-500">
-              O sistema ouve, transcreve e dá uma nota simpática para cada leitura.
-            </p>
-          </article>
-
-          <article className="rounded-[1.75rem] border border-amber-300/15 bg-white/5 p-5 text-slate-100 shadow-[0_20px_60px_-35px_rgba(251,191,36,0.14)] backdrop-blur-xl">
-            <div className="mb-4 inline-flex h-14 w-14 items-center justify-center rounded-3xl bg-amber-300/15 text-3xl shadow-[0_10px_30px_-15px_rgba(251,191,36,0.35)]">
-              🚀
-            </div>
-            <h3 className="text-xl font-black text-slate-950">Jornada divertida</h3>
-            <p className="mt-3 text-sm text-slate-500">
-              Um ambiente alegre e colorido para crianças se sentirem seguras ao ler.
-            </p>
-          </article>
-        </div>
-
-        <div className="grid gap-6 lg:grid-cols-[360px_1fr]">
-          <aside className="rounded-[1.5rem] border border-slate-200/70 bg-slate-200/80 p-5 shadow-[0_20px_50px_-25px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-            <h2 className="text-2xl font-black text-slate-950">Dados da avaliação</h2>
-
-            <label className="mt-5 block text-sm font-bold text-slate-900">
+            <label className="field-label" htmlFor="aluno-avaliacao">
               Nome do aluno
               <input
                 id="aluno-avaliacao"
                 value={aluno}
                 onChange={(event) => setAluno(event.target.value)}
                 placeholder="Ex.: Ana Clara"
-                className="mt-2 w-full rounded-3xl border border-cyan-300/30 bg-white px-4 py-3 text-slate-900 outline-none shadow-[0_15px_35px_-25px_rgba(56,189,248,0.25)] focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200"
+                className="field-input"
               />
             </label>
 
-            <label className="mt-5 block text-sm font-bold text-slate-900">
+            <label className="field-label" htmlFor="turma-avaliacao">
               Turma
               <input
                 id="turma-avaliacao"
                 value={turma}
                 onChange={(event) => setTurma(event.target.value)}
                 placeholder="Ex.: 2 ano A"
-                className="mt-2 w-full rounded-3xl border border-cyan-300/30 bg-white px-4 py-3 text-slate-900 outline-none shadow-[0_15px_35px_-25px_rgba(56,189,248,0.25)] focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200"
+                className="field-input"
               />
             </label>
 
-            <div className="mt-6 rounded-[1.75rem] border border-slate-200/50 bg-slate-200/85 p-4 text-sm font-bold text-slate-900 shadow-[0_15px_45px_-30px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-              <p className="flex justify-between gap-3 border-b border-slate-300/40 pb-2">
-                <span>Texto</span>
-                <span>Parte {currentPart + 1} de {TEXTOS_AVALIACAO.length}</span>
-              </p>
-              <p className="flex justify-between gap-3 border-b border-slate-700/40 py-2">
+            <div className="stats-box">
+              <div className="stats-row">
+                <span>Etapa</span>
+                <span>
+                  {currentPart + 1} de {TEXTOS_AVALIACAO.length}
+                </span>
+              </div>
+              <div className="stats-row">
                 <span>Palavras</span>
                 <span>{quantidadePalavras}</span>
-              </p>
-              <p className="flex justify-between gap-3 pt-2">
+              </div>
+              <div className="stats-row">
                 <span>Tempo</span>
                 <span>{tempo || 0}s</span>
-              </p>
+              </div>
             </div>
           </aside>
 
-          <section className="rounded-[1.75rem] border border-slate-200/60 bg-slate-200/80 p-5 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.08)] backdrop-blur-xl">
+          <section className="card card-padded">
             <div className="flex flex-col gap-4">
               <div>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div className="flex items-center gap-3">
+                <div className="reading-panel-header">
+                  <div className="reading-title-row">
                     {currentPart > 0 && (
                       <button
                         type="button"
@@ -788,26 +813,21 @@ export default function Home() {
                             ? "Aguarde terminar a gravação para voltar"
                             : "Voltar para a etapa anterior"
                         }
-                        className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-full border-2 border-slate-900 bg-white text-xl font-black text-slate-900 shadow-[2px_2px_0_#0f172a] transition hover:-translate-x-0.5 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-40 disabled:shadow-none"
+                        className="btn-back"
                       >
                         ←
                       </button>
                     )}
-                    <h2 className="text-2xl font-black">Texto para leitura</h2>
-                  </div>
-                  <div className="flex gap-2">
-                    <span className="h-8 w-8 rounded-md border-2 border-slate-900 bg-rose-300" />
-                    <span className="h-8 w-8 rounded-md border-2 border-slate-900 bg-cyan-300" />
-                    <span className="h-8 w-8 rounded-md border-2 border-slate-900 bg-amber-300" />
+                    <h2 className="panel-title">Texto para leitura</h2>
                   </div>
                 </div>
-                <div className="mt-4 rounded-[1.75rem] border border-slate-200/60 bg-slate-950/5 p-6 text-2xl font-semibold leading-relaxed text-slate-900 shadow-[0_15px_40px_-25px_rgba(15,23,42,0.12)] backdrop-blur-xl">
+                <div className="reading-stage">
                   {currentPart === 0 ? (
-                    <div className="space-y-4">
-                      <div className="text-center text-sm font-bold uppercase tracking-[0.2em] text-slate-500">
+                    <>
+                      <p className="reading-hint">
                         Leia em voz alta a palavra que aparece. Tente falar a palavra inteira de uma vez.
-                      </div>
-                      <div className="min-h-[5rem] flex items-center justify-center text-5xl font-black text-slate-950">
+                      </p>
+                      <div className="reading-word">
                         {palavrasExibidasCompletas
                           ? ""
                           : wordVisible
@@ -815,18 +835,23 @@ export default function Home() {
                             : ""}
                       </div>
                       {gravando && (
-                        <p className="rounded-full bg-cyan-100 px-4 py-3 text-center text-sm font-bold text-slate-900 shadow-[0_10px_20px_-10px_rgba(14,165,233,0.25)]">
+                        <p className="banner banner-info">
                           Tempo de leitura: {tempoDecorridoFaseUm}s
                         </p>
                       )}
                       {palavrasExibidasCompletas && gravando && (
-                        <p className="rounded-full bg-amber-100 px-4 py-3 text-center text-sm font-bold text-amber-950 shadow-[0_10px_20px_-10px_rgba(245,158,11,0.25)]">
+                        <p className="banner banner-warn">
                           Todas as palavras foram exibidas. Clique em Parar quando terminar de ler.
                         </p>
                       )}
                       {resultado?.avaliacaoFaseUm && currentPart === 0 && (
-                        <div className="mt-4 rounded-lg border-2 border-slate-900 bg-white p-4 text-sm text-slate-900 shadow-[3px_3px_0_#0f172a]">
+                        <div className="mini-result">
                           <p className="font-bold">Resultado da primeira fase</p>
+                          <p>
+                            {resultado.avaliacaoFaseUm.corretas} de {resultado.avaliacaoFaseUm.total}{" "}
+                            palavras ({resultado.precisao}%) · {resultado.tempo}s ·{" "}
+                            {resultado.palavrasPorMinuto} ppm
+                          </p>
                           <p>
                             Palavra inteira: {resultado.avaliacaoFaseUm.leiturasEmBloco} · Em
                             partes: {resultado.avaliacaoFaseUm.leiturasSilabicas}
@@ -844,26 +869,22 @@ export default function Home() {
                           </ul>
                         </div>
                       )}
-                    </div>
+                    </>
                   ) : (
-                    TEXTOS_AVALIACAO[currentPart]
+                    <p className="reading-text-full">{TEXTOS_AVALIACAO[currentPart]}</p>
                   )}
                 </div>
               </div>
 
-              {erro && (
-                <p className="rounded-md border-2 border-amber-500 bg-amber-100 px-4 py-3 text-sm font-bold text-amber-950">
-                  {erro}
-                </p>
-              )}
+              {erro && <p className="banner banner-error">{erro}</p>}
 
-              <div className="flex flex-wrap items-center gap-3">
+              <div className="actions-row">
                 {!gravando ? (
                   <button
                     id="botao-iniciar-gravacao"
                     type="button"
                     onClick={acionarInicio}
-                    className="futuristic-btn rounded-full px-6 py-4 text-lg font-black transition hover:-translate-y-0.5 hover:scale-[1.01]"
+                    className="btn-primary futuristic-btn"
                   >
                     Iniciar gravação
                   </button>
@@ -872,35 +893,29 @@ export default function Home() {
                     id="botao-parar-gravacao"
                     type="button"
                     onClick={acionarParada}
-                    className="futuristic-btn rounded-full bg-gradient-to-r from-fuchsia-400 via-violet-500 to-cyan-400 px-6 py-4 text-lg font-black transition hover:-translate-y-0.5 hover:scale-[1.01]"
+                    className="btn-primary btn-danger futuristic-btn"
                   >
                     Parar gravação
                   </button>
                 )}
 
                 {gravando && (
-                  <span className="rounded-md border-2 border-rose-500 bg-rose-100 px-3 py-2 text-sm font-black text-rose-950">
-                    Gravando leitura...
-                  </span>
+                  <span className="badge badge-recording">Gravando…</span>
                 )}
 
                 {processando && (
-                  <span className="rounded-md border-2 border-cyan-500 bg-cyan-100 px-3 py-2 text-sm font-black text-cyan-950">
-                    Processando resultado...
-                  </span>
+                  <span className="badge badge-processing">Processando…</span>
                 )}
               </div>
 
-              <p className="rounded-[1.5rem] border border-slate-200/60 bg-slate-100/85 px-4 py-3 text-sm font-bold text-slate-950 shadow-[0_15px_40px_-25px_rgba(15,23,42,0.08)] backdrop-blur-xl">
-                Status: <span id="status-gravacao">{statusGravacao}</span>
+              <p className="status-bar">
+                Status: <strong id="status-gravacao">{statusGravacao}</strong>
               </p>
 
               {audioUrl && (
-                <div className="rounded-[1.5rem] border border-slate-200/60 bg-slate-100/85 p-4 shadow-[0_15px_40px_-25px_rgba(14,165,233,0.12)] backdrop-blur-xl">
-                  <p className="mb-3 text-sm font-black text-slate-900">
-                    Gravação capturada
-                  </p>
-                  <audio controls src={audioUrl} className="w-full rounded-3xl bg-slate-100" />
+                <div className="card card-padded">
+                  <p className="panel-title mb-3">Gravação capturada</p>
+                  <audio controls src={audioUrl} className="w-full" />
                 </div>
               )}
 
@@ -915,70 +930,66 @@ export default function Home() {
               />
 
               {transcricao && (
-                <div className="rounded-lg border-2 border-slate-200 bg-slate-100/90 p-4 shadow-[0_15px_30px_-15px_rgba(15,23,42,0.08)]">
-                  <p className="mb-2 text-sm font-black text-slate-800">
-                    Transcrição capturada
-                  </p>
-                  <p className="text-slate-900">{transcricao}</p>
+                <div className="card card-padded">
+                  <p className="panel-title mb-2">Transcrição capturada</p>
+                  <p className="leading-relaxed text-slate-700">{transcricao}</p>
                 </div>
               )}
 
               {resultado && (
-                <div className="grid gap-4 rounded-[1.75rem] border border-slate-200/70 bg-slate-100/90 p-5 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.08)] sm:grid-cols-3 backdrop-blur-xl">
-                  <div className="sm:col-span-3">
-                    <p className="text-sm font-black uppercase tracking-[0.2em] text-slate-500">
+                <div className="result-card">
+                  <div>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                       Classificação
                     </p>
-                    <p className={`mt-2 text-3xl font-bold ${resultado.cor}`}>
-                      {resultado.nivel}
-                    </p>
-                    <p className="mt-2 font-medium text-slate-700">{resultado.observacao}</p>
+                    <p className={`result-level ${resultado.cor}`}>{resultado.nivel}</p>
+                    <p className="mt-2 text-slate-600 leading-relaxed">{resultado.observacao}</p>
+                  </div>
+                  <div className="result-grid">
+                  <div className="result-stat">
+                    <label>Tempo</label>
+                    <span>{resultado.tempo}s</span>
                   </div>
 
-                  <div>
-                    <p className="text-sm font-bold text-slate-500">Tempo</p>
-                    <p className="text-2xl font-semibold">{resultado.tempo}s</p>
-                  </div>
-
-                  <div>
-                    <p className="text-sm font-bold text-slate-500">Palavras</p>
-                    <p className="text-2xl font-semibold">{resultado.palavras}</p>
+                  <div className="result-stat">
+                    <label>Palavras</label>
+                    <span>{resultado.palavras}</span>
                   </div>
 
                   {resultado.avaliacaoFaseUm ? (
                     <>
-                      <div>
-                        <p className="text-sm font-bold text-slate-500">Palavra inteira</p>
-                        <p className="text-2xl font-semibold">
-                          {resultado.avaliacaoFaseUm.leiturasEmBloco}
-                        </p>
+                      <div className="result-stat">
+                        <label>Precisão</label>
+                        <span>{resultado.precisao}%</span>
                       </div>
-                      <div>
-                        <p className="text-sm font-bold text-slate-500">Em partes</p>
-                        <p className="text-2xl font-semibold">
-                          {resultado.avaliacaoFaseUm.leiturasSilabicas}
-                        </p>
+                      <div className="result-stat">
+                        <label>Palavra inteira</label>
+                        <span>{resultado.avaliacaoFaseUm.leiturasEmBloco}</span>
+                      </div>
+                      <div className="result-stat">
+                        <label>Em partes</label>
+                        <span>{resultado.avaliacaoFaseUm.leiturasSilabicas}</span>
+                      </div>
+                      <div className="result-stat">
+                        <label>Ritmo</label>
+                        <span>{resultado.palavrasPorMinuto} ppm</span>
                       </div>
                     </>
                   ) : (
-                    <div>
-                      <p className="text-sm font-bold text-slate-500">Ritmo</p>
-                      <p className="text-2xl font-semibold">
-                        {resultado.palavrasPorMinuto} ppm
-                      </p>
+                    <div className="result-stat">
+                      <label>Ritmo</label>
+                      <span>{resultado.palavrasPorMinuto} ppm</span>
                     </div>
                   )}
 
                   {resultado.precisao !== undefined && !resultado.avaliacaoFaseUm && (
-                    <div>
-                      <p className="text-sm font-bold text-slate-500">Precisão</p>
-                      <p className="text-2xl font-semibold">{resultado.precisao}%</p>
+                    <div className="result-stat">
+                      <label>Precisão</label>
+                      <span>{resultado.precisao}%</span>
                     </div>
                   )}
-
-                  <p className="text-sm font-medium text-slate-500 sm:col-span-3">
-                    {resultado.origem}
-                  </p>
+                  </div>
+                  <p className="mt-4 text-sm text-slate-500">{resultado.origem}</p>
                 </div>
               )}
 
@@ -1001,20 +1012,24 @@ export default function Home() {
                     setErro("");
                     setStatusGravacao("Pronto para iniciar.");
                   }}
-                  className="mt-4 rounded-full border border-cyan-300/40 bg-gradient-to-r from-cyan-400/80 to-slate-100/90 px-6 py-4 text-lg font-black text-slate-950 shadow-[0_20px_60px_-35px_rgba(56,189,248,0.8)] transition hover:-translate-y-0.5 hover:scale-[1.01] hover:from-cyan-300/90 hover:to-slate-200/90"
+                  className="btn-secondary mt-2"
                 >
                   Próxima parte
                 </button>
               )}
 
               {results.length === TEXTOS_AVALIACAO.length && (
-                <div className="mt-6 rounded-lg border-4 border-slate-900 bg-white p-5 shadow-[6px_6px_0_#1e293b]">
-                  <h3 className="text-2xl font-black">Resultados de todas as partes</h3>
+                <div className="result-card mt-2">
+                  <h3 className="panel-title">Resultados de todas as partes</h3>
                   {results.map((res, idx) => (
-                    <div key={idx} className="mt-4 rounded-lg border-2 border-slate-300 bg-gray-50 p-4">
-                      <p className="font-bold">Parte {res.part}: {res.nivel}</p>
-                      <p>Tempo: {res.tempo}s, Ritmo: {res.palavrasPorMinuto} ppm</p>
-                      {res.precisao !== undefined && <p>Precisão: {res.precisao}%</p>}
+                    <div key={idx} className="mini-result mt-3">
+                      <p className="font-semibold">
+                        Parte {res.part}: {res.nivel}
+                      </p>
+                      <p className="mt-1 text-slate-600">
+                        Tempo: {res.tempo}s · Ritmo: {res.palavrasPorMinuto} ppm
+                        {res.precisao !== undefined && ` · Precisão: ${res.precisao}%`}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -1022,7 +1037,7 @@ export default function Home() {
             </div>
           </section>
         </div>
-      </section>
+      </div>
     </main>
   );
 }
