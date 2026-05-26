@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 
+const ENVIAR_PARA_SERVIDOR = false;
 const UPLOAD_URL = "/api/upload";
 
 /** Lista de palavras para a Fase 1 (15 palavras aleatórias de dificuldade progressiva) */
@@ -27,10 +28,8 @@ const TEXTOS_AVALIACAO = [
   PALAVRAS_FASE_UM.join(" "), // Fase 1: 15 palavras aleatórias
   
   // Fase 2: Texto médio com contexto narrativo simples (~25 palavras)
-  "A professora leu uma história para a turma. Era uma história sobre um gato muito esperto que vivia grandes aventuras no jardim da escola. As crianças adoraram.",
+  "A professora leu uma história para a turma. Era uma história sobre um gato muito esperto que vivia grandes aventuras no jardim da escola. As crianças adoraram."
   
-  // Fase 3: Texto longo com narrativa mais complexa (~50 palavras) - Tema: natureza e amizade
-  "Numa manhã ensolarada, Pedro e Ana foram passear no parque da cidade. Eles viram um esquilo subindo rapidamente em uma árvore gigante, carregando nozes para sua toca. Mais adiante, encontraram um lago onde patos nadavam tranquilamente com seus filhotes. As crianças sentaram em um banco para descansar e compartilhar o lanche. Pedro ofereceu metade de sua maçã para Ana, que retribuiu com um suco delicioso. Enquanto comiam, observaram borboletas coloridas voando entre as flores do jardim. Eles perceberam como a natureza é maravilhosa e prometeram voltar no próximo fim de semana para explorar mais aquele lugar encantador."
 ];
 
 /** Ciclo visível/oculto de cada palavra na fase 1 (ms). */
@@ -46,7 +45,7 @@ function classificarFluencia(palavrasPorMinuto, precisao) {
       };
     }
 
-    if (precisao < 55 || palavrasPorMinuto < 35) {
+    if (precisao < 55 || palavrasPorMinuto < 25) {
       return {
         nivel: "Leitor silábico",
         cor: "text-amber-700",
@@ -55,7 +54,7 @@ function classificarFluencia(palavrasPorMinuto, precisao) {
       };
     }
 
-    if (precisao < 85 || palavrasPorMinuto < 75) {
+    if (precisao < 82 || palavrasPorMinuto < 45) {
       return {
         nivel: "Leitor iniciante",
         cor: "text-sky-700",
@@ -80,7 +79,7 @@ function classificarFluencia(palavrasPorMinuto, precisao) {
     };
   }
 
-  if (palavrasPorMinuto < 35) {
+  if (palavrasPorMinuto < 25) {
     return {
       nivel: "Leitor silábico",
       cor: "text-amber-700",
@@ -89,7 +88,7 @@ function classificarFluencia(palavrasPorMinuto, precisao) {
     };
   }
 
-  if (palavrasPorMinuto < 75) {
+  if (palavrasPorMinuto < 45) {
     return {
       nivel: "Leitor iniciante",
       cor: "text-sky-700",
@@ -163,6 +162,59 @@ function similaridadeTexto(a, b) {
 
   const distancia = distanciaLevenshtein(a, b);
   return 1 - distancia / Math.max(a.length, b.length);
+}
+
+function palavrasNormalizadas(valor) {
+  return normalizarTexto(valor).split(/\s+/).filter(Boolean);
+}
+
+function palavrasParecidas(esperada, lida) {
+  if (esperada === lida) {
+    return true;
+  }
+
+  const maiorTamanho = Math.max(esperada.length, lida.length);
+  if (maiorTamanho <= 3) {
+    return false;
+  }
+
+  return similaridadeTexto(esperada, lida) >= 0.78;
+}
+
+function analisarTranscricaoTexto(textoEsperado, transcricao) {
+  const palavrasEsperadas = palavrasNormalizadas(textoEsperado);
+  const palavrasLidas = palavrasNormalizadas(transcricao);
+
+  if (!palavrasEsperadas.length || !palavrasLidas.length) {
+    return {
+      precisao: 0,
+      palavrasReconhecidas: palavrasLidas.length,
+      palavrasCorretas: 0,
+    };
+  }
+
+  const usadas = new Set();
+  let corretas = 0;
+
+  for (let indiceEsperado = 0; indiceEsperado < palavrasEsperadas.length; indiceEsperado += 1) {
+    const palavra = palavrasEsperadas[indiceEsperado];
+    const inicio = Math.max(0, indiceEsperado - 3);
+    const fim = Math.min(palavrasLidas.length - 1, indiceEsperado + 4);
+
+    for (let indiceLido = inicio; indiceLido <= fim; indiceLido += 1) {
+      if (!usadas.has(indiceLido) && palavrasParecidas(palavra, palavrasLidas[indiceLido])) {
+        usadas.add(indiceLido);
+        corretas += 1;
+        break;
+      }
+    }
+  }
+
+  return {
+    precisao: Math.min(100, Math.round((corretas / palavrasEsperadas.length) * 100)),
+    palavrasReconhecidas: palavrasLidas.length,
+    palavrasCorretas: corretas,
+  };
 }
 
 function analisarFormaDaPalavra(tokens, indiceInicial, palavraEsperada) {
@@ -579,12 +631,13 @@ export default function Home() {
     recognition.lang = "pt-BR";
     recognition.continuous = true;
     recognition.interimResults = true;
+    recognition.maxAlternatives = 3;
 
     recognition.onresult = (event) => {
       let textoReconhecido = "";
 
       for (let index = 0; index < event.results.length; index += 1) {
-        textoReconhecido += `${event.results[index][0].transcript} `;
+        textoReconhecido += `${event.results[index][0]?.transcript ?? ""} `;
       }
 
       const textoLimpo = textoReconhecido.trim();
@@ -628,8 +681,12 @@ export default function Home() {
     setGravando(false);
     setStatusGravacao("Gravação finalizada. Processando resultado...");
     reconhecimentoVoz.current?.stop();
-    mediaRecorder.current.stop();
-    streamAtual.current?.getTracks().forEach((track) => track.stop());
+    window.setTimeout(() => {
+      if (mediaRecorder.current && mediaRecorder.current.state !== "inactive") {
+        mediaRecorder.current.stop();
+      }
+      streamAtual.current?.getTracks().forEach((track) => track.stop());
+    }, 350);
   }
 
   function acionarInicio(event) {
@@ -642,18 +699,26 @@ export default function Home() {
     pararLeitura();
   }
 
-  function voltarEtapaAnterior() {
-    if (currentPart === 0 || gravando || processando) {
+  function selecionarEtapa(indiceEtapa) {
+    if (indiceEtapa === currentPart || gravando || processando) {
+      return;
+    }
+
+    const etapaDisponivel =
+      indiceEtapa === 0 ||
+      currentPart >= indiceEtapa ||
+      results.some((item) => item.part >= indiceEtapa);
+
+    if (!etapaDisponivel) {
       return;
     }
 
     limparTimersFaseUm();
 
-    const novaParte = currentPart - 1;
+    const novaParte = indiceEtapa;
     const numeroParte = novaParte + 1;
     const resultadoSalvo = results.find((item) => item.part === numeroParte);
 
-    setResults((lista) => lista.filter((item) => item.part <= numeroParte));
     setCurrentPart(novaParte);
     setCurrentWordIndex(0);
     setWordVisible(true);
@@ -669,7 +734,7 @@ export default function Home() {
     setErro("");
     setStatusGravacao(
       resultadoSalvo
-        ? "Etapa anterior. Você pode gravar de novo ou seguir para a próxima parte."
+        ? "Resultado desta etapa carregado. Você pode gravar novamente se precisar."
         : "Pronto para iniciar.",
     );
   }
@@ -682,12 +747,15 @@ export default function Home() {
     const avaliacaoFaseUm = currentPart === 0
       ? avaliarFaseUm(transcricaoAtual.current || "", palavrasTextoAtual)
       : undefined;
+    const avaliacaoTexto = currentPart > 0
+      ? analisarTranscricaoTexto(TEXTOS_AVALIACAO[currentPart], transcricaoAtual.current || "")
+      : undefined;
 
     const classificacao = currentPart === 0 && avaliacaoFaseUm
       ? classificarFaseUmPorForma(avaliacaoFaseUm, duracao)
       : classificarFluencia(
           duracao > 0 ? Math.round((quantidadePalavras / duracao) * 60) : 0,
-          avaliacaoFaseUm?.precisao,
+          avaliacaoTexto?.precisao,
         );
 
     setAudioUrl(url);
@@ -702,7 +770,9 @@ export default function Home() {
       tempo: duracao,
       palavras: quantidadePalavras,
       palavrasPorMinuto,
-      precisao: avaliacaoFaseUm?.precisao,
+      precisao: avaliacaoFaseUm?.precisao ?? avaliacaoTexto?.precisao,
+      palavrasReconhecidas: avaliacaoTexto?.palavrasReconhecidas,
+      palavrasCorretas: avaliacaoTexto?.palavrasCorretas,
       transcricao: transcricaoAtual.current || "Transcrição automática não capturada.",
       avaliacaoFaseUm,
       origem: currentPart === 0
@@ -710,7 +780,14 @@ export default function Home() {
         : "Classificação pelo que foi lido e pelo tempo de leitura.",
     };
 
+    let resultadoFinal = resultadoLocal;
+
     try {
+      if (!ENVIAR_PARA_SERVIDOR) {
+        setResultado(resultadoFinal);
+        return;
+      }
+
       const formData = new FormData();
       formData.append("audio", audioBlob, "leitura.webm");
       formData.append("aluno", aluno);
@@ -730,17 +807,20 @@ export default function Home() {
       }
 
       const dados = await resposta.json();
-      setResultado(
+      resultadoFinal =
         currentPart === 0
           ? { ...dados, ...resultadoLocal }
-          : { ...resultadoLocal, ...dados },
-      );
+          : { ...resultadoLocal, ...dados };
+      setResultado(resultadoFinal);
     } catch (erro) {
       console.error("Erro ao chamar API de upload:", erro);
       setResultado(resultadoLocal);
       setErro(`Falha ao enviar dados para o servidor. ${erro?.message || ""}`);
     } finally {
-      setResults(prev => [...prev, { ...resultadoLocal, part: currentPart + 1 }]);
+      setResults((prev) => [
+        ...prev.filter((item) => item.part !== currentPart + 1),
+        { ...resultadoFinal, part: currentPart + 1 },
+      ].sort((a, b) => a.part - b.part));
       setShowNextButton(true);
       setProcessando(false);
       setStatusGravacao("Avaliação concluída.");
@@ -755,29 +835,37 @@ export default function Home() {
         <header className="app-header">
           <h1>Avaliação de fluência leitora</h1>
           <p>
-            Grave a leitura do aluno, acompanhe o progresso em três etapas e receba uma
+            Grave a leitura do aluno, acompanhe o progresso em duas etapas e receba uma
             classificação com base na fala e no tempo.
           </p>
-          <div className="steps-bar" role="list" aria-label="Etapas da avaliação">
+          <div className="steps-bar" role="tablist" aria-label="Etapas da avaliação">
             {TEXTOS_AVALIACAO.map((_, indice) => {
               const numero = indice + 1;
               const ativa = indice === currentPart;
               const concluida = results.some((item) => item.part === numero);
+              const etapaDisponivel =
+                indice === 0 ||
+                currentPart >= indice ||
+                results.some((item) => item.part >= indice);
               return (
-                <span
+                <button
                   key={numero}
-                  role="listitem"
+                  type="button"
+                  role="tab"
+                  aria-selected={ativa}
+                  disabled={!etapaDisponivel || gravando || processando}
+                  onClick={() => selecionarEtapa(indice)}
                   className={`step-pill${ativa ? " active" : ""}${concluida && !ativa ? " done" : ""}`}
                 >
                   Parte {numero}
-                </span>
+                </button>
               );
             })}
           </div>
         </header>
 
         <div className="workspace">
-          <aside className="card card-padded">
+          <aside className="side-panel">
             <h2 className="panel-title">Dados da avaliação</h2>
 
             <label className="field-label" htmlFor="aluno-avaliacao">
@@ -820,27 +908,11 @@ export default function Home() {
             </div>
           </aside>
 
-          <section className="card card-padded">
+          <section className="main-panel">
             <div className="flex flex-col gap-4">
               <div>
                 <div className="reading-panel-header">
                   <div className="reading-title-row">
-                    {currentPart > 0 && (
-                      <button
-                        type="button"
-                        onClick={voltarEtapaAnterior}
-                        disabled={gravando || processando}
-                        aria-label="Voltar para a etapa anterior"
-                        title={
-                          gravando || processando
-                            ? "Aguarde terminar a gravação para voltar"
-                            : "Voltar para a etapa anterior"
-                        }
-                        className="btn-back"
-                      >
-                        ←
-                      </button>
-                    )}
                     <h2 className="panel-title">Texto para leitura</h2>
                   </div>
                 </div>
@@ -936,7 +1008,7 @@ export default function Home() {
               </p>
 
               {audioUrl && (
-                <div className="card card-padded">
+                <div className="capture-panel">
                   <p className="panel-title mb-3">Gravação capturada</p>
                   <audio controls src={audioUrl} className="w-full" />
                 </div>
@@ -953,7 +1025,7 @@ export default function Home() {
               />
 
               {transcricao && (
-                <div className="card card-padded">
+                <div className="capture-panel">
                   <p className="panel-title mb-2">Transcrição capturada</p>
                   <p className="leading-relaxed text-slate-700">{transcricao}</p>
                 </div>

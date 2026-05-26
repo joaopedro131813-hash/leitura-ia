@@ -7,6 +7,7 @@ const eslintConfig = defineConfig([
   globalIgnores([
     // Default ignores of eslint-config-next:
     ".next/**",
+    ".firebase/**",
     "node_modules/**",
     "out/**",
     "build/**",

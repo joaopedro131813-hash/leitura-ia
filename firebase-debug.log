@@ -1,0 +1,199 @@
+[debug] [2026-05-26T22:43:29.222Z] ----------------------------------------------------------------------
+[debug] [2026-05-26T22:43:29.224Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\joaop\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js deploy --only hosting
+[debug] [2026-05-26T22:43:29.225Z] CLI Version:   15.4.0
+[debug] [2026-05-26T22:43:29.225Z] Platform:      win32
+[debug] [2026-05-26T22:43:29.225Z] Node Version:  v22.22.0
+[debug] [2026-05-26T22:43:29.226Z] Time:          Tue May 26 2026 19:43:29 GMT-0300 (Horário Padrão de Brasília)
+[debug] [2026-05-26T22:43:29.226Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-05-26T22:43:30.784Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-05-26T22:43:30.785Z] > authorizing via signed-in user (joaopedro_1089@hotmail.com)
+[debug] [2026-05-26T22:43:30.785Z] [iam] checking project alfabetizacao-web-ec90b for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2026-05-26T22:43:30.787Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:30.787Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:30.788Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/alfabetizacao-web-ec90b:testIamPermissions [none]
+[debug] [2026-05-26T22:43:30.789Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/alfabetizacao-web-ec90b:testIamPermissions x-goog-quota-user=projects/alfabetizacao-web-ec90b
+[debug] [2026-05-26T22:43:30.789Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/alfabetizacao-web-ec90b:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-26T22:43:31.920Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/alfabetizacao-web-ec90b:testIamPermissions 200
+[debug] [2026-05-26T22:43:31.920Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/alfabetizacao-web-ec90b:testIamPermissions {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2026-05-26T22:43:31.921Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:31.921Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:31.922Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/alfabetizacao-web-ec90b [none]
+[debug] [2026-05-26T22:43:32.529Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/alfabetizacao-web-ec90b 200
+[debug] [2026-05-26T22:43:32.529Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/alfabetizacao-web-ec90b {"projectId":"alfabetizacao-web-ec90b","projectNumber":"176302414023","displayName":"alfabetizacao-web","name":"projects/alfabetizacao-web-ec90b","resources":{"hostingSite":"alfabetizacao-web-ec90b"},"state":"ACTIVE","etag":"1_00da86f1-1ec7-4f75-a83c-f5b5d2722910"}
+[info] 
+[info] === Deploying to 'alfabetizacao-web-ec90b'...
+[info] 
+[info] i  deploying hosting 
+[debug] [2026-05-26T22:43:32.535Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:32.535Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:32.535Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions [none]
+[debug] [2026-05-26T22:43:32.535Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions {"status":"CREATED","labels":{"deployment-tool":"cli-firebase"}}
+[debug] [2026-05-26T22:43:34.475Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions 200
+[debug] [2026-05-26T22:43:34.475Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions {"name":"projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25","status":"CREATED","config":{},"labels":{"deployment-tool":"cli-firebase"}}
+[info] i  hosting[alfabetizacao-web-ec90b]: beginning deploy... 
+[info] i  hosting[alfabetizacao-web-ec90b]: found 46 files in out 
+[debug] [2026-05-26T22:43:34.493Z] [hosting] uploading with 200 concurrency
+[debug] [2026-05-26T22:43:34.494Z] [hosting] hash cache [b3V0] not populated
+[debug] [2026-05-26T22:43:34.525Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:34.525Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:34.527Z] [hosting] hash cache [b3V0] stored for 46 files
+[debug] [2026-05-26T22:43:34.528Z] [hosting][hash queue][FINAL] {"max":23,"min":16,"avg":17.217391304347828,"active":0,"complete":46,"success":46,"errored":0,"retried":0,"total":46,"elapsed":33}
+[debug] [2026-05-26T22:43:34.528Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25:populateFiles [none]
+[debug] [2026-05-26T22:43:34.528Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25:populateFiles {"files":{"/__next._tree.txt":"51227a4e5b64930f398a8adb87123a5bcc67aacbb346cc1429a6f1125abcc013","/__next._index.txt":"b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618","/__next.__PAGE__.txt":"d4e0c13acc858712b792302e18d2928ee525f4451fc5155187b2f487239a19ef","/__next._head.txt":"c0a42b3b223a03e7ad743522ca24f3487caa5fd84822557c2a3781a377a0dd38","/__next._full.txt":"12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1","/_not-found.txt":"d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574","/_not-found.html":"b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb","/window.svg":"6bd2003bd35bb32c1c0d99ab3aeac0cc1edaefd79f27df1d954bc87184048d74","/vercel.svg":"529a1a21b4a82475a82db26173c28d7b27e2dc9d4b900eaf1c5329d96eea4ddd","/next.svg":"0665b9ab4493aa9d7e988b57024e28772ae543e804b8cf6b0a3633854b7c3c7f","/index.txt":"12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1","/index.html":"abb1ce537be2f9efba5d64232e5ba08a032630d0b2a4173530ddd150f2881716","/globe.svg":"6502a3e6120bf2d6e8417e7c40bb57fb8a6954de9c86d3f43076a75b60cd23a2","/file.svg":"5a09df6187e21aa9a7d05094389385876ac93c818e1dcbb77a26a8fe408bf79c","/_not-found/__next._tree.txt":"288f1fbd377171917c873b5b2a73e54f597a0e13459d586755b898371f75d2b4","/gravacao-fallback.js":"67162dfb538e8006a9fefeb36fde781373d2a02f822c3bcc4658818b908befe4","/_not-found/__next._index.txt":"b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618","/_not-found/__next._not-found.txt":"2df7553ac303621853e74bf9f1270e3d7ee0b7fca5417ba82f3aab3d90c0c44b","/404.html":"b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb","/_not-found/__next._head.txt":"b21201a6e2c9a669a4f58c7a4d792b61d445e2d586ceda9034d9c7e9386e8254","/_next/static/MhpchKYaE_y7OIctr-uJ0/_ssgManifest.js":"dc28a4dc92fe352ed5d2201bd3972ce47691bc8e89e0400a68d1541d0567c6d5","/_next/static/MhpchKYaE_y7OIctr-uJ0/_clientMiddlewareManifest.js":"5e57f6166b702492ab9551af57e4546546c184673a4c0432f73b96f62820f7eb","/_not-found/__next._not-found/__PAGE__.txt":"60ef5041c89ba97d8a250f1a053b77042b791229a5ebe3a8e6ee3ceb03decd51","/_not-found/__next._full.txt":"d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574","/_next/static/MhpchKYaE_y7OIctr-uJ0/_buildManifest.js":"dcbe1c9b9159ca21caea98e1bad364012ae284e9551375ca62b83d2811efac91","/_next/static/media/fef07dbb0973bf53-s.12tyk43_3sh9u.woff2":"4cd714514fc3454c1fdc247cf7be84c91aec7662e952cfe8c11cb8766ef8c3f4","/_next/static/media/bbc41e54d2fcbd21-s.0mvwgmnhv29no.woff2":"b34282f52212b6b0f36e313eba4d72d7fb0be93f8b39cf2c9551fa435c2fb2db","/_next/static/media/8a480f0b521d4e75-s.0jzbimsg8vl84.woff2":"9e317fb808ec4714d6144f277f4de983b017fe5f3753369936ad5359f06b02e5","/_next/static/media/7d817b4c03b0c5f1-s.0uzt.a6d44yda.woff2":"bf6972eac2724de27a3a45ae0357dc0f7bda5551f86eb4cd7cc19e4bddd1ab8c","/favicon.ico":"36eaaa9259cda5765c4061fa8b7bf61c74dbda3a2a721a0811c73f5dae61a2e9","/_next/static/media/6306c77e7c8268e4-s.0mao5jbfbduzp.woff2":"1fc0fc2c1dcbfe6510b5312bae44dfc4682b6ac0e6e563493e44ca46ed82095f","/_next/static/media/53b9e256198e5412-s.0-wfv7uh4i7h9.woff2":"4e4038e4cb17b1349cc9c717fca51c0e00782a2093bd8a939efc70e5d78bceb7","/_next/static/media/5ce348bf30bf5439-s.0ee55_hj9qcer.woff2":"17986413ed579ec94797d3bfef16ed2228c059686df53fd0b69c1505abcdbccd","/_next/static/chunks/turbopack-0a6g~u-uv7bi7.js":"a1fd9883b1beb07901dbca1ec438802940fdfea24f6d31ae089ec8383b48c61c","/_next/static/media/4fa387ec64143e14-s.0.qu-9752pffj.woff2":"7aa00e8331a5975fdc52b6b989c274a2193f19ea1e14f3eb0c5f657ea8a1abc8","/_next/static/chunks/0qul_~lhz~c~5.js":"ddff90691e22c094f6e48e47a3266f6a6ee761faff0bfe7fd953a93a9e409e8f","/_next/static/media/favicon.0x3dzn~oxb6tn.ico":"36eaaa9259cda5765c4061fa8b7bf61c74dbda3a2a721a0811c73f5dae61a2e9","/_next/static/chunks/05vm9f8oznic_.js":"f35b201dbf99a8b64a011883afa4f4d81e5c5416fc323424fabf96c63d667ddf","/_next/static/chunks/13ylkqfqvbs4f.js":"ac55c38a7047c31e49589f0f3c514989b589054e99db63eacd7c84117dbf9370","/_next/static/chunks/0.qoypwp8h~n7.css":"3a2ba53f289b7408e7a9e62c97042e619a2820fa70022587d117a13ddbe60874","/_next/static/media/7178b3e590c64307-s.0nx0ww8fni_q3.woff2":"9db501bf314e8bcbd31ac7f79495753a2a2da4243c362edc5f07928f3c9146a0","/_next/static/media/caa3a2e1cccd8315-s.p.09~u27dqhyhd6.woff2":"a1862350cad8975186ec7d95e2c6f6ad548d6bd2219ffaa79420067bbf14ad49","/_next/static/media/797e433ab948586e-s.p.09zddjkbdep5a.woff2":"40dd7eecf3fa0ae4836727211132b07540e356cd4cf3285dd34d4e15d6e7802a","/_next/static/chunks/03~yq9q893hmn.js":"18e28d3214eda45048d80d3925ea7627b809e69ad2e95f7f98459e9146a61c3d","/_next/static/chunks/08t~.phmvbqjf.js":"3d99507a4c2821e4cf04a1859781605e534add1857c9f139bfea0430a2975112","/_next/static/chunks/0b7k~j29r14pp.js":"007679c2ea76b53364b44a4729d14722a0b327f8adb5776ce36445079e67f3c3"}}
+[debug] [2026-05-26T22:43:35.499Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25:populateFiles 200
+[debug] [2026-05-26T22:43:35.499Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25:populateFiles {"uploadRequiredHashes":["b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618","c0a42b3b223a03e7ad743522ca24f3487caa5fd84822557c2a3781a377a0dd38","b21201a6e2c9a669a4f58c7a4d792b61d445e2d586ceda9034d9c7e9386e8254","b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb","51227a4e5b64930f398a8adb87123a5bcc67aacbb346cc1429a6f1125abcc013","12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1","f35b201dbf99a8b64a011883afa4f4d81e5c5416fc323424fabf96c63d667ddf","d4e0c13acc858712b792302e18d2928ee525f4451fc5155187b2f487239a19ef","3a2ba53f289b7408e7a9e62c97042e619a2820fa70022587d117a13ddbe60874","288f1fbd377171917c873b5b2a73e54f597a0e13459d586755b898371f75d2b4","abb1ce537be2f9efba5d64232e5ba08a032630d0b2a4173530ddd150f2881716","60ef5041c89ba97d8a250f1a053b77042b791229a5ebe3a8e6ee3ceb03decd51","d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574","2df7553ac303621853e74bf9f1270e3d7ee0b7fca5417ba82f3aab3d90c0c44b"],"uploadUrl":"https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files"}
+[debug] [2026-05-26T22:43:35.500Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.500Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.500Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.501Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.501Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.501Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.502Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.502Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.502Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.502Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.502Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.503Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.503Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.503Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.503Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.504Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.504Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.504Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.504Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.505Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.505Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.505Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.505Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.506Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.506Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.506Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.506Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.507Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:35.507Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618 [none]
+[debug] [2026-05-26T22:43:35.507Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618 [stream]
+[debug] [2026-05-26T22:43:35.509Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/c0a42b3b223a03e7ad743522ca24f3487caa5fd84822557c2a3781a377a0dd38 [none]
+[debug] [2026-05-26T22:43:35.509Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/c0a42b3b223a03e7ad743522ca24f3487caa5fd84822557c2a3781a377a0dd38 [stream]
+[debug] [2026-05-26T22:43:35.511Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b21201a6e2c9a669a4f58c7a4d792b61d445e2d586ceda9034d9c7e9386e8254 [none]
+[debug] [2026-05-26T22:43:35.511Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b21201a6e2c9a669a4f58c7a4d792b61d445e2d586ceda9034d9c7e9386e8254 [stream]
+[debug] [2026-05-26T22:43:35.512Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb [none]
+[debug] [2026-05-26T22:43:35.512Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb [stream]
+[debug] [2026-05-26T22:43:35.514Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/51227a4e5b64930f398a8adb87123a5bcc67aacbb346cc1429a6f1125abcc013 [none]
+[debug] [2026-05-26T22:43:35.514Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/51227a4e5b64930f398a8adb87123a5bcc67aacbb346cc1429a6f1125abcc013 [stream]
+[debug] [2026-05-26T22:43:35.516Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1 [none]
+[debug] [2026-05-26T22:43:35.516Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1 [stream]
+[debug] [2026-05-26T22:43:35.518Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/f35b201dbf99a8b64a011883afa4f4d81e5c5416fc323424fabf96c63d667ddf [none]
+[debug] [2026-05-26T22:43:35.518Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/f35b201dbf99a8b64a011883afa4f4d81e5c5416fc323424fabf96c63d667ddf [stream]
+[debug] [2026-05-26T22:43:35.519Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d4e0c13acc858712b792302e18d2928ee525f4451fc5155187b2f487239a19ef [none]
+[debug] [2026-05-26T22:43:35.519Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d4e0c13acc858712b792302e18d2928ee525f4451fc5155187b2f487239a19ef [stream]
+[debug] [2026-05-26T22:43:35.521Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/3a2ba53f289b7408e7a9e62c97042e619a2820fa70022587d117a13ddbe60874 [none]
+[debug] [2026-05-26T22:43:35.521Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/3a2ba53f289b7408e7a9e62c97042e619a2820fa70022587d117a13ddbe60874 [stream]
+[debug] [2026-05-26T22:43:35.522Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/288f1fbd377171917c873b5b2a73e54f597a0e13459d586755b898371f75d2b4 [none]
+[debug] [2026-05-26T22:43:35.522Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/288f1fbd377171917c873b5b2a73e54f597a0e13459d586755b898371f75d2b4 [stream]
+[debug] [2026-05-26T22:43:35.523Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/abb1ce537be2f9efba5d64232e5ba08a032630d0b2a4173530ddd150f2881716 [none]
+[debug] [2026-05-26T22:43:35.523Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/abb1ce537be2f9efba5d64232e5ba08a032630d0b2a4173530ddd150f2881716 [stream]
+[debug] [2026-05-26T22:43:35.524Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/60ef5041c89ba97d8a250f1a053b77042b791229a5ebe3a8e6ee3ceb03decd51 [none]
+[debug] [2026-05-26T22:43:35.524Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/60ef5041c89ba97d8a250f1a053b77042b791229a5ebe3a8e6ee3ceb03decd51 [stream]
+[debug] [2026-05-26T22:43:35.526Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574 [none]
+[debug] [2026-05-26T22:43:35.526Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574 [stream]
+[debug] [2026-05-26T22:43:35.527Z] >>> [apiv2][query] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/2df7553ac303621853e74bf9f1270e3d7ee0b7fca5417ba82f3aab3d90c0c44b [none]
+[debug] [2026-05-26T22:43:35.527Z] >>> [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/2df7553ac303621853e74bf9f1270e3d7ee0b7fca5417ba82f3aab3d90c0c44b [stream]
+[debug] [2026-05-26T22:43:35.529Z] [hosting][populate queue][FINAL] {"max":982,"min":982,"avg":982,"active":0,"complete":1,"success":1,"errored":0,"retried":0,"total":1,"elapsed":1004}
+[debug] [2026-05-26T22:43:35.529Z] [hosting] uploads queued: 14
+[info] i  hosting: uploading new files [0/14] (0%) 
+[debug] [2026-05-26T22:43:36.909Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/60ef5041c89ba97d8a250f1a053b77042b791229a5ebe3a8e6ee3ceb03decd51 200
+[debug] [2026-05-26T22:43:36.910Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/60ef5041c89ba97d8a250f1a053b77042b791229a5ebe3a8e6ee3ceb03decd51 [stream]
+[debug] [2026-05-26T22:43:36.911Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb 200
+[debug] [2026-05-26T22:43:36.911Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b1bf7b20943bfaa6361912e48e3cbcea7228877cd3d4bf25c4cfbd180c09cfbb [stream]
+[debug] [2026-05-26T22:43:36.952Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/f35b201dbf99a8b64a011883afa4f4d81e5c5416fc323424fabf96c63d667ddf 200
+[debug] [2026-05-26T22:43:36.952Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/f35b201dbf99a8b64a011883afa4f4d81e5c5416fc323424fabf96c63d667ddf [stream]
+[debug] [2026-05-26T22:43:36.982Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1 200
+[debug] [2026-05-26T22:43:36.982Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/12061ad773f7c12fff10e170fabbcde1509dbd9028d6351b7f20747b88e8b7c1 [stream]
+[debug] [2026-05-26T22:43:36.999Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618 200
+[debug] [2026-05-26T22:43:36.999Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b7891d70d226844cf30db468d2ae18d0e683e422b68b0fcbfcadfb6e931b2618 [stream]
+[debug] [2026-05-26T22:43:37.074Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d4e0c13acc858712b792302e18d2928ee525f4451fc5155187b2f487239a19ef 200
+[debug] [2026-05-26T22:43:37.075Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d4e0c13acc858712b792302e18d2928ee525f4451fc5155187b2f487239a19ef [stream]
+[debug] [2026-05-26T22:43:37.080Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/c0a42b3b223a03e7ad743522ca24f3487caa5fd84822557c2a3781a377a0dd38 200
+[debug] [2026-05-26T22:43:37.081Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/c0a42b3b223a03e7ad743522ca24f3487caa5fd84822557c2a3781a377a0dd38 [stream]
+[debug] [2026-05-26T22:43:37.098Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/51227a4e5b64930f398a8adb87123a5bcc67aacbb346cc1429a6f1125abcc013 200
+[debug] [2026-05-26T22:43:37.098Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/51227a4e5b64930f398a8adb87123a5bcc67aacbb346cc1429a6f1125abcc013 [stream]
+[debug] [2026-05-26T22:43:37.099Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b21201a6e2c9a669a4f58c7a4d792b61d445e2d586ceda9034d9c7e9386e8254 200
+[debug] [2026-05-26T22:43:37.100Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/b21201a6e2c9a669a4f58c7a4d792b61d445e2d586ceda9034d9c7e9386e8254 [stream]
+[debug] [2026-05-26T22:43:37.163Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/abb1ce537be2f9efba5d64232e5ba08a032630d0b2a4173530ddd150f2881716 200
+[debug] [2026-05-26T22:43:37.164Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/abb1ce537be2f9efba5d64232e5ba08a032630d0b2a4173530ddd150f2881716 [stream]
+[debug] [2026-05-26T22:43:37.178Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/3a2ba53f289b7408e7a9e62c97042e619a2820fa70022587d117a13ddbe60874 200
+[debug] [2026-05-26T22:43:37.179Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/3a2ba53f289b7408e7a9e62c97042e619a2820fa70022587d117a13ddbe60874 [stream]
+[debug] [2026-05-26T22:43:37.197Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/288f1fbd377171917c873b5b2a73e54f597a0e13459d586755b898371f75d2b4 200
+[debug] [2026-05-26T22:43:37.197Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/288f1fbd377171917c873b5b2a73e54f597a0e13459d586755b898371f75d2b4 [stream]
+[debug] [2026-05-26T22:43:37.211Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574 200
+[debug] [2026-05-26T22:43:37.211Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/d7f54f0b8063aa148e86b05bc632735a07b2e8ea032fa0ff7f614c568f1e3574 [stream]
+[debug] [2026-05-26T22:43:37.265Z] <<< [apiv2][status] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/2df7553ac303621853e74bf9f1270e3d7ee0b7fca5417ba82f3aab3d90c0c44b 200
+[debug] [2026-05-26T22:43:37.265Z] <<< [apiv2][body] POST https://upload-firebasehosting.googleapis.com/upload/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25/files/2df7553ac303621853e74bf9f1270e3d7ee0b7fca5417ba82f3aab3d90c0c44b [stream]
+[debug] [2026-05-26T22:43:37.265Z] [hosting][upload queue][FINAL] {"max":1759,"min":1405,"avg":1577.5,"active":0,"complete":14,"success":14,"errored":0,"retried":0,"total":14,"elapsed":1766}
+[info] i  hosting: upload complete 
+[info] +  hosting[alfabetizacao-web-ec90b]: file upload complete 
+[debug] [2026-05-26T22:43:37.265Z] [hosting] deploy completed after 2787ms
+[debug] [2026-05-26T22:43:37.266Z] [
+  {
+    "config": {
+      "public": "out",
+      "ignore": [
+        "firebase.json",
+        "**/.*",
+        "**/node_modules/**"
+      ],
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/index.html"
+        }
+      ],
+      "headers": [
+        {
+          "source": "/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "no-cache, no-store, must-revalidate"
+            }
+          ]
+        },
+        {
+          "source": "/_next/static/**",
+          "headers": [
+            {
+              "key": "Cache-Control",
+              "value": "public, max-age=31536000, immutable"
+            }
+          ]
+        }
+      ],
+      "site": "alfabetizacao-web-ec90b"
+    },
+    "version": "projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25"
+  }
+]
+[info] i  hosting[alfabetizacao-web-ec90b]: finalizing version... 
+[debug] [2026-05-26T22:43:37.268Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:37.268Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:37.268Z] >>> [apiv2][query] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25 updateMask=status%2Cconfig
+[debug] [2026-05-26T22:43:37.269Z] >>> [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25 {"status":"FINALIZED","config":{"rewrites":[{"glob":"**","path":"/index.html"}],"headers":[{"glob":"/**","headers":{"Cache-Control":"no-cache, no-store, must-revalidate"}},{"glob":"/_next/static/**","headers":{"Cache-Control":"public, max-age=31536000, immutable"}}]}}
+[debug] [2026-05-26T22:43:37.960Z] <<< [apiv2][status] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25 200
+[debug] [2026-05-26T22:43:37.960Z] <<< [apiv2][body] PATCH https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25 {"name":"projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-cache, no-store, must-revalidate"},"glob":"/**"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"/_next/static/**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-26T22:43:32.924856Z","createUser":{"email":"joaopedro_1089@hotmail.com"},"finalizeTime":"2026-05-26T22:43:37.013802Z","finalizeUser":{"email":"joaopedro_1089@hotmail.com"}}
+[debug] [2026-05-26T22:43:37.960Z] [hosting] finalized version for alfabetizacao-web-ec90b:[object Object]
+[info] +  hosting[alfabetizacao-web-ec90b]: version finalized 
+[info] i  hosting[alfabetizacao-web-ec90b]: releasing new version... 
+[debug] [2026-05-26T22:43:37.961Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:37.961Z] Checked if tokens are valid: true, expires at: 1779838229995
+[debug] [2026-05-26T22:43:37.961Z] >>> [apiv2][query] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/channels/live/releases versionName=projects%2F176302414023%2Fsites%2Falfabetizacao-web-ec90b%2Fversions%2F5bc8841cdfc1aa25
+[debug] [2026-05-26T22:43:37.962Z] >>> [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/channels/live/releases {}
+[debug] [2026-05-26T22:43:38.767Z] <<< [apiv2][status] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/channels/live/releases 200
+[debug] [2026-05-26T22:43:38.767Z] <<< [apiv2][body] POST https://firebasehosting.googleapis.com/v1beta1/projects/-/sites/alfabetizacao-web-ec90b/channels/live/releases {"name":"projects/176302414023/sites/alfabetizacao-web-ec90b/channels/live/releases/1779835417124000","version":{"name":"projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-cache, no-store, must-revalidate"},"glob":"/**"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"/_next/static/**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-26T22:43:32.924856Z","createUser":{"email":"joaopedro_1089@hotmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocIEoMJa8vWCYsIJlwLjOHlS3AREAJlN95dNrnMjT2FbMsE-TwXM"},"finalizeTime":"2026-05-26T22:43:37.013802Z","finalizeUser":{"email":"joaopedro_1089@hotmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocIEoMJa8vWCYsIJlwLjOHlS3AREAJlN95dNrnMjT2FbMsE-TwXM"}},"type":"DEPLOY","releaseTime":"2026-05-26T22:43:37.124Z","releaseUser":{"email":"joaopedro_1089@hotmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocIEoMJa8vWCYsIJlwLjOHlS3AREAJlN95dNrnMjT2FbMsE-TwXM"}}
+[debug] [2026-05-26T22:43:38.767Z] [hosting] release: {"name":"projects/176302414023/sites/alfabetizacao-web-ec90b/channels/live/releases/1779835417124000","version":{"name":"projects/176302414023/sites/alfabetizacao-web-ec90b/versions/5bc8841cdfc1aa25","status":"FINALIZED","config":{"headers":[{"headers":{"Cache-Control":"no-cache, no-store, must-revalidate"},"glob":"/**"},{"headers":{"Cache-Control":"public, max-age=31536000, immutable"},"glob":"/_next/static/**"}],"rewrites":[{"glob":"**","path":"/index.html"}]},"labels":{"deployment-tool":"cli-firebase"},"createTime":"2026-05-26T22:43:32.924856Z","createUser":{"email":"joaopedro_1089@hotmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocIEoMJa8vWCYsIJlwLjOHlS3AREAJlN95dNrnMjT2FbMsE-TwXM"},"finalizeTime":"2026-05-26T22:43:37.013802Z","finalizeUser":{"email":"joaopedro_1089@hotmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocIEoMJa8vWCYsIJlwLjOHlS3AREAJlN95dNrnMjT2FbMsE-TwXM"}},"type":"DEPLOY","releaseTime":"2026-05-26T22:43:37.124Z","releaseUser":{"email":"joaopedro_1089@hotmail.com","imageUrl":"https://lh3.googleusercontent.com/a/ACg8ocIEoMJa8vWCYsIJlwLjOHlS3AREAJlN95dNrnMjT2FbMsE-TwXM"}}
+[info] +  hosting[alfabetizacao-web-ec90b]: release complete 
+[info] 
+[info] +  Deploy complete! 
+[info] 
+[info] Project Console: https://console.firebase.google.com/project/alfabetizacao-web-ec90b/overview
+[info] Hosting URL: https://alfabetizacao-web-ec90b.web.app
